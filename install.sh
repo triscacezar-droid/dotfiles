@@ -195,6 +195,18 @@ else
     green "Wallpapers already present ($(ls "$WALL_DIR" | wc -l) files)"
 fi
 
+# Subtle gruvbox-dark gradient wallpaper that matches conky's panel.
+MINIMAL_WP="$WALL_DIR/gruvbox_dark_minimal.png"
+if [[ ! -f "$MINIMAL_WP" ]]; then
+    cyan "Generating gruvbox-dark minimal wallpaper"
+    if python3 -c "from PIL import Image" 2>/dev/null; then
+        python3 "$DOTFILES/scripts/gen-wallpaper.py" "$MINIMAL_WP" >/dev/null \
+            || yellow "wallpaper generation failed (non-fatal)"
+    else
+        yellow "python3-pil not installed — skipping wallpaper generation"
+    fi
+fi
+
 # ------------------------------------------------------------------ symlink configs
 cyan "Linking config files (edits in ~/dotfiles/configs/ propagate)"
 mkdir -p "$HOME/.config" "$HOME/.local/share/nautilus-python/extensions"
