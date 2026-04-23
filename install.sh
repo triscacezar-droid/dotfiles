@@ -328,9 +328,11 @@ if command -v gnome-shell >/dev/null; then
             wall="$WALL_DIR/gruvbox_dark_minimal.png"
             [[ -f "$wall" ]] || wall=$(find "$WALL_DIR" -maxdepth 1 -type f 2>/dev/null | sort | head -1)
             if [[ -n "$wall" ]]; then
-                gsettings set org.gnome.desktop.background picture-uri      "file://$wall"
-                gsettings set org.gnome.desktop.background picture-uri-dark "file://$wall"
-                gsettings set org.gnome.desktop.background picture-options  "zoom"
+                gsettings set org.gnome.desktop.background picture-uri       "file://$wall"
+                gsettings set org.gnome.desktop.background picture-uri-dark  "file://$wall"
+                gsettings set org.gnome.desktop.background picture-options   "zoom"
+                gsettings set org.gnome.desktop.screensaver picture-uri      "file://$wall"
+                gsettings set org.gnome.desktop.screensaver picture-options  "zoom"
             fi
         fi
     fi

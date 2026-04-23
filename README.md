@@ -52,14 +52,18 @@ pick up changes.
   uses Gdk.Clipboard directly — no `wl-copy` subprocess because that hangs
   from inside GTK apps).
 
-### Login screen
-- **GDM** uses the gruvbox gradient wallpaper and the Bibata cursor / Papirus
-  icons on the greeter. Ubuntu's GDM ignores plain dconf overrides — the
-  background is baked into `/usr/share/gnome-shell/gnome-shell-theme.gresource`.
+### Login + lock screen
+- **GDM** (login) uses the gruvbox gradient wallpaper plus Bibata cursor /
+  Papirus icons on the greeter. Ubuntu's GDM ignores plain dconf overrides —
+  the background is baked into `/usr/share/gnome-shell/gnome-shell-theme.gresource`.
   We install the `gdm-settings` apt package and drive its Python API from
   `install.sh` to patch the gresource (a `.default` backup is saved next to
-  it). Plain dconf overrides are still installed as a fallback for vanilla
-  GDM. Sources live in `configs/gdm/`.
+  it). Plain dconf overrides are installed as a fallback for vanilla GDM.
+  Sources live in `configs/gdm/`.
+- **Lock screen** (`Super+L`) uses the same wallpaper via
+  `org.gnome.desktop.screensaver picture-uri`. Kept in sync with the desktop
+  wallpaper by both `install.sh` and `scripts/set-theme.sh`, so theme
+  switching updates the lock screen too.
 
 ### Desktop widget
 - **Conky** — gruvbox-themed translucent overlay in the top-left of the

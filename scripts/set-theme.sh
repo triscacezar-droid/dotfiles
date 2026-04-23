@@ -97,9 +97,11 @@ if command -v python3 >/dev/null && python3 -c "from PIL import Image" 2>/dev/nu
     echo "    wallpaper:  #${WALL_TOP:-32302f} → #${WALL_BOTTOM:-1d2021}"
     python3 "$DOTFILES/scripts/gen-wallpaper.py" "$WALL_OUT" \
             --top "${WALL_TOP:-32302f}" --bottom "${WALL_BOTTOM:-1d2021}" >/dev/null
-    gsettings set org.gnome.desktop.background picture-uri      "file://$WALL_OUT"
-    gsettings set org.gnome.desktop.background picture-uri-dark "file://$WALL_OUT"
-    gsettings set org.gnome.desktop.background picture-options  "zoom"
+    gsettings set org.gnome.desktop.background  picture-uri      "file://$WALL_OUT"
+    gsettings set org.gnome.desktop.background  picture-uri-dark "file://$WALL_OUT"
+    gsettings set org.gnome.desktop.background  picture-options  "zoom"
+    gsettings set org.gnome.desktop.screensaver picture-uri      "file://$WALL_OUT"
+    gsettings set org.gnome.desktop.screensaver picture-options  "zoom"
 fi
 
 # ---- Conky palette ---------------------------------------------------------
