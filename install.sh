@@ -34,7 +34,6 @@ sudo apt-get install -y --no-install-recommends \
     kitty alacritty \
     zathura zathura-pdf-poppler \
     fzf ripgrep bat fd-find zoxide \
-    btop \
     conky-all \
     papirus-icon-theme \
     sassc \
@@ -106,6 +105,24 @@ if ! command -v yazi >/dev/null && [[ ! -x "$HOME/.local/bin/yazi" ]]; then
     rm -rf "$tmp"
 else
     green "yazi already installed"
+fi
+
+# --- btop (upstream static musl build) ---
+# Ubuntu 24.04 apt ships btop 1.3.0, which segfaults on Ryzen iGPU via its
+# ROCm-SMI code path. Upstream 1.4.x ships a static build compiled with
+# GPU_SUPPORT=false that avoids the broken code path entirely.
+if ! command -v btop >/dev/null || ! btop --version 2>&1 | grep -qE "1\.4\.|1\.[5-9]\."; then
+    cyan "Installing btop (upstream v1.4.x static build)"
+    tmp=$(mktemp -d)
+    curl -fsSLo "$tmp/btop.tbz" \
+        https://github.com/aristocratos/btop/releases/latest/download/btop-x86_64-unknown-linux-musl.tbz
+    tar -xf "$tmp/btop.tbz" -C "$tmp"
+    find "$tmp" -name 'btop' -executable -type f | head -1 \
+        | xargs -I{} cp {} "$HOME/.local/bin/btop"
+    chmod +x "$HOME/.local/bin/btop"
+    rm -rf "$tmp"
+else
+    green "btop already at a good version"
 fi
 
 # --- lazygit ---

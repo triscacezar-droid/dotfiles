@@ -213,3 +213,7 @@ this `zshrc` and gitignored so it never leaks into the public repo.
 - **fastfetch is not in Ubuntu 24.04 apt** — install from upstream deb.
 - **eza is not in Ubuntu 24.04 apt** — install the static binary from
   GitHub releases.
+- **btop in Ubuntu 24.04 apt (v1.3.0) segfaults on Ryzen iGPU** through the
+  ROCm-SMI code path. Install the upstream v1.4.x static musl binary
+  (`GPU_SUPPORT=false`) into `~/.local/bin`. GPU info is handled by conky
+  anyway, so no loss.
