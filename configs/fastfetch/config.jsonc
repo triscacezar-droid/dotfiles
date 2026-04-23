@@ -1,0 +1,46 @@
+// Gruvbox-orange fastfetch.
+// Runs on every interactive shell open — keep the module list tight.
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "logo": {
+        "source": "ubuntu_small",
+        "padding": { "top": 1, "right": 3 },
+        "color": {
+            "1": "38;2;254;128;25",   // gruvbox orange (fe8019)
+            "2": "38;2;235;219;178"   // gruvbox fg0 (ebdbb2)
+        }
+    },
+    "display": {
+        "separator": "  ",
+        "key": { "width": 10 },
+        "color": {
+            "keys":   "38;2;254;128;25", // orange
+            "title":  "38;2;184;187;38",  // green
+            "output": "38;2;235;219;178"  // fg
+        }
+    },
+    "modules": [
+        {
+            "type": "title",
+            "color": { "user": "green", "at": "white", "host": "yellow" }
+        },
+        { "type": "separator", "string": "─", "outputColor": "38;2;102;92;84" },
+        { "type": "os", "key": "  OS" },
+        { "type": "host", "key": "  HOST" },
+        { "type": "kernel", "key": "  KRN", "format": "{sysname} {release}" },
+        { "type": "uptime", "key": "  UP" },
+        { "type": "packages", "key": "  PKG" },
+        { "type": "shell", "key": "  SH" },
+        { "type": "terminal", "key": "  TRM" },
+        { "type": "wm", "key": "  WM" },
+        { "type": "theme", "key": "  GTK" },
+        { "type": "icons", "key": "  ICN" },
+        { "type": "cpu", "key": "  CPU" },
+        { "type": "gpu", "key": "  GPU" },
+        { "type": "memory", "key": "  MEM" },
+        { "type": "disk", "key": "  DSK" },
+        { "type": "localip", "key": "  NET", "showIpv4": true, "showIpv6": false },
+        "break",
+        { "type": "colors", "symbol": "circle" }
+    ]
+}

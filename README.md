@@ -25,7 +25,9 @@ pick up changes.
 - **Zsh** + **oh-my-zsh** + `zsh-autosuggestions` + `zsh-syntax-highlighting`.
 - **Starship prompt** with the `gruvbox-rainbow` preset — shows git branch,
   Python venv, exit codes, language versions.
-- **Fastfetch** runs on each interactive shell open (distro splash).
+- **Fastfetch** runs on each interactive shell open — custom gruvbox-orange
+  config at `~/.config/fastfetch/config.jsonc` with Nerd-Font key icons,
+  green title, orange accents, and a compact module layout.
 - **Atuin** replaces `Ctrl+R` history search with fuzzy TUI + SQLite-backed
   history.
 - **CLI replacements**: `eza` (ls), `bat` (cat), `fzf` (fuzzy), `fd` (find),
@@ -49,6 +51,12 @@ pick up changes.
 - **Nautilus Copy Path** right-click extension (custom Python extension,
   uses Gdk.Clipboard directly — no `wl-copy` subprocess because that hangs
   from inside GTK apps).
+
+### Login screen
+- **GDM** uses the gruvbox gradient wallpaper and the Bibata cursor / Papirus
+  icons, via dconf overrides in `/etc/dconf/db/gdm.d/00-theme` with the
+  profile at `/etc/dconf/profile/gdm`. Re-applied whenever `install.sh` runs
+  (needs sudo). Sources live in `configs/gdm/`.
 
 ### Desktop widget
 - **Conky** — gruvbox-themed translucent overlay in the top-left of the
@@ -182,6 +190,9 @@ install script into `~/.themes`.
 │   ├── conky/conky.conf       # desktop widget layout
 │   ├── conky/weather.sh       # wttr.in fetcher (symlinked to ~/.local/bin/conky-weather)
 │   ├── conky/conky.desktop    # GNOME autostart entry
+│   ├── fastfetch/config.jsonc # shell splash config
+│   ├── gdm/profile-gdm        # login-screen dconf profile (→ /etc/dconf/profile/gdm)
+│   ├── gdm/00-theme           # login-screen theme override (→ /etc/dconf/db/gdm.d/)
 │   ├── nautilus-python/copy_path.py
 │   └── zshrc
 ```

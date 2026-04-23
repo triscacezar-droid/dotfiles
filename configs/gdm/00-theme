@@ -1,0 +1,14 @@
+[org/gnome/desktop/background]
+picture-uri='file:///usr/share/backgrounds/gruvbox_dark_minimal.png'
+picture-uri-dark='file:///usr/share/backgrounds/gruvbox_dark_minimal.png'
+picture-options='zoom'
+primary-color='#1d2021'
+secondary-color='#1d2021'
+
+[org/gnome/desktop/interface]
+cursor-theme='Bibata-Modern-Classic'
+icon-theme='Papirus-Dark'
+color-scheme='prefer-dark'
+
+[org/gnome/login-screen]
+logo='/usr/share/backgrounds/gruvbox_dark_minimal.png'

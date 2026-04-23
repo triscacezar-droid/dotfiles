@@ -240,6 +240,7 @@ link() {  # link <src-in-configs> <dst-in-home>
 }
 
 link conky/conky.conf                 .config/conky/conky.conf
+link fastfetch/config.jsonc           .config/fastfetch/config.jsonc
 link kitty/kitty.conf                 .config/kitty/kitty.conf
 link alacritty/alacritty.toml         .config/alacritty/alacritty.toml
 mkdir -p "$HOME/.config/alacritty/themes"
@@ -377,6 +378,18 @@ fi
 # ------------------------------------------------------------------ PDF handler
 if command -v xdg-mime >/dev/null; then
     xdg-mime default org.pwmt.zathura.desktop application/pdf 2>/dev/null || true
+fi
+
+# ------------------------------------------------------------------ GDM login screen
+# Apply gruvbox background + cursor/icon themes to the GDM greeter via dconf.
+# Idempotent: re-running just rewrites the files and re-runs `dconf update`.
+GDM_WALLPAPER="/usr/share/backgrounds/gruvbox_dark_minimal.png"
+if [[ -d /etc/dconf/profile ]] && [[ -f "$WALL_DIR/gruvbox_dark_minimal.png" ]]; then
+    cyan "Theming GDM login screen (needs sudo)"
+    sudo install -Dm644 "$WALL_DIR/gruvbox_dark_minimal.png"   "$GDM_WALLPAPER"             || yellow "gdm wallpaper copy failed"
+    sudo install -Dm644 "$CONFIGS/gdm/profile-gdm"             /etc/dconf/profile/gdm       || yellow "gdm profile install failed"
+    sudo install -Dm644 "$CONFIGS/gdm/00-theme"                /etc/dconf/db/gdm.d/00-theme || yellow "gdm theme install failed"
+    sudo dconf update                                                                       || yellow "dconf update failed"
 fi
 
 # ------------------------------------------------------------------ wrap up
