@@ -95,6 +95,14 @@ pick up changes.
   window (with cwd + layout) into `~/.cache/kitty/session.conf` that
   `kitty --session` can replay. A systemd user timer
   (`kitty-session-save.timer`, every 60 s) runs it automatically.
+- **Pre-socket kittys are captured via `/proc` fallback.** kitty's remote
+  control is startup-time only, so kittys launched before `listen_on
+  unix:@kitty` existed aren't reachable via IPC. The save script scans
+  `/proc` for `kitty` master processes, walks their descendants to find
+  child shells (and claude processes), and emits one OS window per shell.
+  Tabs/splits are flattened in this fallback mode; the IPC path preserves
+  them. The two paths are unioned, deduping via shell PIDs so the same
+  window isn't captured twice.
 - `kitty-restore-session` launches `kitty --session <file>` against that
   snapshot; Super+K also uses it as the first-launch path when no kitty is
   running.
