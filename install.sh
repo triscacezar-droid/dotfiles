@@ -38,6 +38,7 @@ sudo apt-get install -y --no-install-recommends \
     papirus-icon-theme \
     sassc \
     python3-nautilus wl-clipboard \
+    xdotool \
     curl git unzip xz-utils tar \
     gnome-shell-extension-manager
 
