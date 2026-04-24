@@ -1,4 +1,4 @@
-# dotfiles — Ubuntu + GNOME rice
+# rice — Ubuntu + GNOME rice
 
 Everything installed and configured during the 2026-04-23 ricing session.
 Target: Ubuntu 24.04 LTS with GNOME 46 on Wayland.
@@ -7,13 +7,38 @@ Theme: **Gruvbox Dark** throughout.
 ## One-command install on a fresh machine
 
 ```bash
-git clone <this-repo> ~/dotfiles
-cd ~/dotfiles
-./install.sh
+curl -fsSL https://raw.githubusercontent.com/triscacezar-droid/rice/main/bootstrap.sh | bash
 ```
 
-The installer is idempotent — safe to run again after partial failures or to
-pick up changes.
+That clones this repo into `~/rice`, runs `install.sh`, and drops the `rice`
+CLI into `~/.local/bin/rice`. Both are idempotent — safe to re-run after
+partial failures or to pick up changes.
+
+Prefer to clone by hand? Same result:
+
+```bash
+git clone https://github.com/triscacezar-droid/rice.git ~/rice
+~/rice/install.sh
+```
+
+## The `rice` CLI
+
+After install, everything is driven by `rice`:
+
+```
+rice install              install / refresh everything
+rice update               git pull in $RICE_HOME, then reinstall
+rice theme                show current theme + list available
+rice theme <name>         switch theme (terminal / cursor / gnome / folders / wallpaper / conky)
+rice theme list           list themes
+rice theme current        print the current theme
+rice doctor               sanity-check the install
+rice edit                 open the repo in Cursor
+rice where                print $RICE_HOME
+rice --help
+```
+
+Clone location is `$HOME/rice` by default — override with `RICE_HOME=/other/path`.
 
 ## What this setup gives you
 
@@ -133,22 +158,22 @@ pick up changes.
 
 ## Changing the color theme
 
-Run one command:
-
 ```bash
-~/dotfiles/scripts/set-theme.sh gruvbox_dark        # default
-~/dotfiles/scripts/set-theme.sh gruvbox_light
-~/dotfiles/scripts/set-theme.sh catppuccin_mocha
-~/dotfiles/scripts/set-theme.sh tokyo_night
-~/dotfiles/scripts/set-theme.sh tokyo_night_storm
-~/dotfiles/scripts/set-theme.sh dracula
-~/dotfiles/scripts/set-theme.sh nord
-~/dotfiles/scripts/set-theme.sh rose_pine
-~/dotfiles/scripts/set-theme.sh everforest
-~/dotfiles/scripts/set-theme.sh kanagawa
+rice theme gruvbox_dark        # default
+rice theme gruvbox_light
+rice theme catppuccin_mocha
+rice theme tokyo_night
+rice theme tokyo_night_storm
+rice theme dracula
+rice theme nord
+rice theme rose_pine
+rice theme everforest
+rice theme kanagawa
 ```
 
-Run the script with no args for the current list.
+`rice theme` with no args shows the current theme plus the full list.
+`rice theme` is a thin wrapper over `scripts/set-theme.sh` — calling the
+script directly still works.
 
 **What the script changes:**
 - Alacritty — rewrites the `import = [...]` line to point at the chosen theme.
@@ -200,9 +225,12 @@ install script into `~/.themes`.
 ## Directory layout
 
 ```
-~/dotfiles/
+~/rice/
 ├── README.md              # this file
+├── bootstrap.sh           # curl | bash entrypoint — clones + runs install.sh
 ├── install.sh             # idempotent installer
+├── bin/
+│   └── rice               # CLI (symlinked to ~/.local/bin/rice by install.sh)
 ├── scripts/
 │   ├── set-theme.sh       # full-rice system-wide theme switcher
 │   ├── gen-wallpaper.py   # gradient wallpaper generator (--top / --bottom)
@@ -231,7 +259,7 @@ install script into `~/.themes`.
 │   └── zshrc
 ```
 
-Editing a config in `~/dotfiles/configs/` propagates to the live location
+Editing a config in `~/rice/configs/` propagates to the live location
 because the installer creates symlinks (not copies).
 
 Personal aliases and anything machine-specific (API tokens, local paths,

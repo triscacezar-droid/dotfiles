@@ -225,7 +225,7 @@ if [[ ! -f "$MINIMAL_WP" ]]; then
 fi
 
 # ------------------------------------------------------------------ symlink configs
-cyan "Linking config files (edits in ~/dotfiles/configs/ propagate)"
+cyan "Linking config files (edits in $DOTFILES/configs/ propagate)"
 mkdir -p "$HOME/.config" "$HOME/.local/share/nautilus-python/extensions"
 
 link() {  # link <src-in-configs> <dst-in-home>
@@ -233,7 +233,7 @@ link() {  # link <src-in-configs> <dst-in-home>
     mkdir -p "$(dirname "$dst")"
     # Back up a pre-existing real file (don't overwrite without leaving a trail).
     if [[ -e "$dst" && ! -L "$dst" ]]; then
-        mv "$dst" "$dst.pre-dotfiles-$(date +%s)"
+        mv "$dst" "$dst.pre-rice-$(date +%s)"
         yellow "backed up existing $dst"
     fi
     ln -sfn "$src" "$dst"
@@ -267,6 +267,11 @@ for s in kitty-surface kitty-save-session kitty-restore-session; do
     ln -sfn "$DOTFILES/scripts/${s}.sh" "$HOME/.local/bin/${s}"
     chmod +x "$DOTFILES/scripts/${s}.sh"
 done
+
+# ------------------------------------------------------------------ rice CLI
+cyan "Installing rice CLI to ~/.local/bin/rice"
+ln -sfn "$DOTFILES/bin/rice" "$HOME/.local/bin/rice"
+chmod +x "$DOTFILES/bin/rice"
 
 # Systemd user timer — snapshot kitty layout every 60s while a graphical
 # session is running. Save script no-ops if the kitty IPC socket isn't up.

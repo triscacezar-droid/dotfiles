@@ -1,0 +1,143 @@
+#!/usr/bin/env bash
+# rice — Ubuntu 24.04 + GNOME 46 ricing CLI.
+# Thin dispatcher over the scripts in $RICE_HOME (default $HOME/rice).
+set -euo pipefail
+
+RICE_HOME="${RICE_HOME:-$HOME/rice}"
+
+info() { printf "\033[1;36m==>\033[0m %s\n" "$*"; }
+err()  { printf "\033[1;31mrice:\033[0m %s\n" "$*" >&2; exit 1; }
+
+need_repo() {
+    [[ -d "$RICE_HOME/.git" ]] || err "no rice repo at $RICE_HOME — set RICE_HOME or bootstrap with:
+    curl -fsSL https://raw.githubusercontent.com/triscacezar-droid/rice/main/bootstrap.sh | bash"
+}
+
+usage() {
+    cat <<EOF
+rice — Ubuntu 24.04 + GNOME 46 ricing
+
+usage:
+  rice install              install / refresh everything (apt, binaries, configs, themes)
+  rice update               git pull in \$RICE_HOME, then reinstall
+  rice theme                show current theme + list available
+  rice theme <name>         switch theme (terminal / cursor / gnome / gtk / folders / wallpaper / conky)
+  rice theme list           list available themes
+  rice theme current        print the currently applied theme
+  rice doctor               sanity-check the install
+  rice edit                 open \$RICE_HOME in Cursor
+  rice where                print \$RICE_HOME
+  rice -h, --help           this help
+
+env:
+  RICE_HOME                 repo location (default: \$HOME/rice)
+EOF
+}
+
+current_theme() {
+    local conf="$HOME/.config/alacritty/alacritty.toml"
+    [[ -f "$conf" ]] || { echo "unknown"; return; }
+    grep -oE 'themes/[a-z_]+\.toml' "$conf" | head -1 | sed -E 's|themes/||; s|\.toml$||'
+}
+
+list_themes() {
+    for t in "$RICE_HOME/scripts/themes/"*.sh; do
+        basename "$t" .sh
+    done
+}
+
+cmd_install() {
+    need_repo
+    exec "$RICE_HOME/install.sh" "$@"
+}
+
+cmd_update() {
+    need_repo
+    info "git pull in $RICE_HOME"
+    git -C "$RICE_HOME" pull --ff-only
+    exec "$RICE_HOME/install.sh" "$@"
+}
+
+cmd_theme() {
+    need_repo
+    local sub="${1:-}"
+    case "$sub" in
+        ""|list)
+            local cur; cur="$(current_theme)"
+            echo "current: ${cur:-unknown}"
+            echo "available:"
+            list_themes | sed 's/^/  /'
+            ;;
+        current)
+            current_theme
+            ;;
+        *)
+            exec "$RICE_HOME/scripts/set-theme.sh" "$sub"
+            ;;
+    esac
+}
+
+cmd_doctor() {
+    need_repo
+    local ok=1
+    check() {  # check <label> <shell-expr>
+        # Subshell disables pipefail so `cmd | grep -q pat` doesn't trip
+        # SIGPIPE when grep exits early on a match.
+        if ( set +o pipefail; eval "$2" ) >/dev/null 2>&1; then
+            printf "  \033[1;32mok\033[0m  %s\n" "$1"
+        else
+            printf "  \033[1;31m!!\033[0m  %s\n" "$1"
+            ok=0
+        fi
+    }
+    echo "== rice doctor ($RICE_HOME) =="
+    check "rice repo at \$RICE_HOME"          "test -d '$RICE_HOME/.git'"
+    check "install.sh executable"             "test -x '$RICE_HOME/install.sh'"
+    check "rice on PATH"                      "command -v rice"
+    check "JetBrainsMono Nerd Font"           "fc-list | grep -q 'JetBrainsMono Nerd'"
+    check "starship"                          "command -v starship"
+    check "eza"                               "command -v eza"
+    check "yazi"                              "command -v yazi"
+    check "btop"                              "command -v btop"
+    check "lazygit"                           "command -v lazygit"
+    check "zsh as login shell"                "test \"\$(getent passwd \$USER | cut -d: -f7)\" = \"\$(command -v zsh)\""
+    check "kitty.conf symlinked"              "test -L '$HOME/.config/kitty/kitty.conf'"
+    check "alacritty.toml symlinked"          "test -L '$HOME/.config/alacritty/alacritty.toml'"
+    check "starship.toml symlinked"           "test -L '$HOME/.config/starship.toml'"
+    check "conky autostart"                   "test -L '$HOME/.config/autostart/conky.desktop'"
+    check "kitty-session-save.timer active"   "systemctl --user is-active kitty-session-save.timer"
+    if [[ $ok -eq 1 ]]; then
+        echo
+        info "all checks passed"
+    else
+        echo
+        err "some checks failed — try: rice install"
+    fi
+}
+
+cmd_edit() {
+    need_repo
+    command -v cursor >/dev/null || err "cursor not on PATH"
+    exec cursor "$RICE_HOME"
+}
+
+cmd_where() {
+    echo "$RICE_HOME"
+}
+
+main() {
+    local cmd="${1:-}"
+    (( $# > 0 )) && shift || true
+    case "$cmd" in
+        ""|-h|--help|help) usage ;;
+        install)           cmd_install "$@" ;;
+        update)            cmd_update  "$@" ;;
+        theme)             cmd_theme   "$@" ;;
+        doctor)            cmd_doctor  "$@" ;;
+        edit)              cmd_edit    "$@" ;;
+        where)             cmd_where   "$@" ;;
+        *)                 err "unknown command: $cmd (try: rice --help)" ;;
+    esac
+}
+
+main "$@"
