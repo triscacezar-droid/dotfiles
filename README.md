@@ -208,10 +208,13 @@ name. To tweak a theme or add a new one, edit/create a file there — no
 changes to `set-theme.sh` needed.
 
 **What the script does NOT change** (hand-themed, low visual impact):
-- Zathura (`configs/zathura/zathurarc`)
 - Yazi (`configs/yazi/theme.toml`)
 - Lazygit (`configs/lazygit/config.yml`)
 - Starship (`configs/starship/starship.toml`)
+
+**Zathura caveat**: it reads its config at startup, so already-open windows
+keep the old colors. Quit and relaunch to pick up a theme switch. PDF
+recolor is auto-enabled for dark themes and disabled for light ones.
 
 **Cursor IDE caveat:** switching to a non-gruvbox theme assumes the matching
 Cursor extension is installed. Solarized Light ships built-in. Install the

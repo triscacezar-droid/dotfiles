@@ -147,4 +147,51 @@ if [[ -f "$CONKY_CONF" ]]; then
     fi
 fi
 
+# ---- Zathura ---------------------------------------------------------------
+# Rewrite the colour values in configs/zathura/zathurarc. Zathura reads its
+# config at startup, so already-open instances need a restart to see the
+# change. PDF recolor is on for dark themes, off for light.
+ZATHURARC="$DOTFILES/configs/zathura/zathurarc"
+if [[ -f "$ZATHURARC" ]]; then
+    echo "    zathura:    palette (restart Zathura to apply)"
+    zsub() {  # zsub <setting-key> <hex-without-#>
+        sed -i -E "s|(^set $1[[:space:]]+)\"#[0-9a-fA-F]{6}\"|\1\"#$2\"|" "$ZATHURARC"
+    }
+    zsub default-bg                 "${CONKY_BG:-1d2021}"
+    zsub default-fg                 "${CONKY_FG:-ebdbb2}"
+    zsub recolor-lightcolor         "${CONKY_BG:-1d2021}"
+    zsub recolor-darkcolor          "${CONKY_FG:-ebdbb2}"
+    zsub statusbar-fg               "${CONKY_FG:-ebdbb2}"
+    zsub statusbar-bg               "${CONKY_MUTED:-665c54}"
+    zsub inputbar-fg                "${CONKY_FG:-ebdbb2}"
+    zsub inputbar-bg                "${CONKY_BG:-1d2021}"
+    zsub highlight-color            "${CONKY_C3:-fabd2f}"
+    zsub highlight-fg               "${CONKY_BG:-1d2021}"
+    zsub highlight-active-color     "${CONKY_C1:-fe8019}"
+    zsub index-fg                   "${CONKY_FG:-ebdbb2}"
+    zsub index-bg                   "${CONKY_BG:-1d2021}"
+    zsub index-active-fg            "${CONKY_BG:-1d2021}"
+    zsub index-active-bg            "${CONKY_C3:-fabd2f}"
+    zsub render-loading-fg          "${CONKY_FG:-ebdbb2}"
+    zsub render-loading-bg          "${CONKY_BG:-1d2021}"
+    zsub completion-fg              "${CONKY_FG:-ebdbb2}"
+    zsub completion-bg              "${CONKY_MUTED:-665c54}"
+    zsub completion-group-fg        "${CONKY_C3:-fabd2f}"
+    zsub completion-group-bg        "${CONKY_MUTED:-665c54}"
+    zsub completion-highlight-fg    "${CONKY_BG:-1d2021}"
+    zsub completion-highlight-bg    "${CONKY_C3:-fabd2f}"
+    zsub notification-fg            "${CONKY_BG:-1d2021}"
+    zsub notification-bg            "${CONKY_C2:-b8bb26}"
+    zsub notification-error-fg      "${CONKY_BG:-1d2021}"
+    zsub notification-error-bg      "${CONKY_C4:-fb4934}"
+    zsub notification-warning-fg    "${CONKY_BG:-1d2021}"
+    zsub notification-warning-bg    "${CONKY_C3:-fabd2f}"
+    # Recolor PDFs only on dark themes — on light themes the page bg is
+    # already light, so recoloring would invert it pointlessly.
+    case "${GNOME_SCHEME:-prefer-dark}" in
+        prefer-light) sed -i -E "s|(^set recolor[[:space:]]+)(true\|false)|\1false|" "$ZATHURARC" ;;
+        *)            sed -i -E "s|(^set recolor[[:space:]]+)(true\|false)|\1true|"  "$ZATHURARC" ;;
+    esac
+fi
+
 echo "==> Done. Open a fresh terminal window for Kitty/Alacritty to pick up the font color change."

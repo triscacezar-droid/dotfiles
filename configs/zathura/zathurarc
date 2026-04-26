@@ -1,5 +1,6 @@
-# Gruvbox Dark theme for zathura
-# Toggle recolor (dark mode) with: Ctrl+r
+# Zathura color theme — rewritten by `rice theme <name>` (set-theme.sh).
+# Hand-edits to color hex values WILL be overwritten on the next switch.
+# Toggle recolor (PDF dark mode) at runtime with: Ctrl+r
 
 set font "JetBrainsMono Nerd Font 11"
 set guioptions ""
@@ -11,48 +12,49 @@ set smooth-scroll true
 set window-title-basename true
 set statusbar-basename true
 
-# Recolor PDFs with gruvbox colors (enabled by default)
+# Recolor PDFs to match the active theme (auto-toggled by `rice theme`:
+# on for dark themes, off for light).
 set recolor true
 set recolor-keephue true
 set recolor-reverse-video true
 
-# Gruvbox palette
-set default-bg              "#282828"
+# Theme palette (overwritten by `rice theme`)
+set default-bg              "#1d2021"
 set default-fg              "#ebdbb2"
 
-set recolor-lightcolor      "#282828"  # background (was white)
+set recolor-lightcolor      "#1d2021"  # background (was white)
 set recolor-darkcolor       "#ebdbb2"  # foreground (was black)
 
 set statusbar-fg            "#ebdbb2"
-set statusbar-bg            "#3c3836"
+set statusbar-bg            "#665c54"
 
 set inputbar-fg             "#ebdbb2"
-set inputbar-bg             "#282828"
+set inputbar-bg             "#1d2021"
 
-set notification-fg         "#282828"
-set notification-bg         "#98971a"
+set notification-fg         "#1d2021"
+set notification-bg         "#b8bb26"
 
-set notification-error-fg   "#282828"
+set notification-error-fg   "#1d2021"
 set notification-error-bg   "#fb4934"
 
-set notification-warning-fg "#282828"
+set notification-warning-fg "#1d2021"
 set notification-warning-bg "#fabd2f"
 
 set completion-fg           "#ebdbb2"
-set completion-bg           "#3c3836"
-set completion-group-fg     "#d79921"
-set completion-group-bg     "#3c3836"
-set completion-highlight-fg "#282828"
-set completion-highlight-bg "#d79921"
+set completion-bg           "#665c54"
+set completion-group-fg     "#fabd2f"
+set completion-group-bg     "#665c54"
+set completion-highlight-fg "#1d2021"
+set completion-highlight-bg "#fabd2f"
 
-set highlight-color         "#d79921"
-set highlight-fg            "#282828"
+set highlight-color         "#fabd2f"
+set highlight-fg            "#1d2021"
 set highlight-active-color  "#fe8019"
 
 set index-fg                "#ebdbb2"
-set index-bg                "#282828"
-set index-active-fg         "#282828"
-set index-active-bg         "#d79921"
+set index-bg                "#1d2021"
+set index-active-fg         "#1d2021"
+set index-active-bg         "#fabd2f"
 
 set render-loading-fg       "#ebdbb2"
-set render-loading-bg       "#282828"
+set render-loading-bg       "#1d2021"

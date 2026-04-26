@@ -1,12 +1,12 @@
 [colors.primary]
-background = "#300a24"
-foreground = "#ffffff"
+background = "#1e1e1e"
+foreground = "#ececec"
 bright_foreground = "#ffffff"
 dim_foreground = "#aea79f"
 
 [colors.cursor]
 text = "CellBackground"
-cursor = "CellForeground"
+cursor = "#e95420"
 
 [colors.vi_mode_cursor]
 text = "CellBackground"
@@ -14,7 +14,7 @@ cursor = "CellForeground"
 
 [colors.selection]
 text = "CellForeground"
-background = "#4e1f3f"
+background = "#3a3a3a"
 
 [colors.normal]
 black   = "#2e3436"
