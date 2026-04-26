@@ -159,6 +159,11 @@ Clone location is `$HOME/rice` by default — override with `RICE_HOME=/other/pa
 ## Changing the color theme
 
 ```bash
+# Stock / system defaults
+rice theme ubuntu              # Yaru-dark + classic GNOME aubergine terminal
+rice theme ubuntu_light        # Yaru + light terminal
+rice theme adwaita             # vanilla GNOME, dark
+rice theme adwaita_light       # vanilla GNOME, light
 # Dark
 rice theme gruvbox_dark        # default
 rice theme catppuccin_mocha

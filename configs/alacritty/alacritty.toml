@@ -1,4 +1,9 @@
 # To switch themes, run `rice theme <name>` (or change the import below).
+# Stock / system defaults:
+#   ubuntu.toml            (Yaru-dark + classic GNOME Terminal aubergine)
+#   ubuntu_light.toml      (Yaru + light terminal)
+#   adwaita.toml           (vanilla GNOME, dark)
+#   adwaita_light.toml     (vanilla GNOME, light)
 # Available dark themes:
 #   gruvbox_dark.toml      (warm retro, high contrast)  <- default
 #   catppuccin_mocha.toml  (colorful, pastel-y, trendy)
