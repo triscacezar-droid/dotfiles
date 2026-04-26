@@ -39,7 +39,22 @@ if [[ -f "$ALACRITTY_CONFIG" ]]; then
 fi
 
 # ---- Kitty -----------------------------------------------------------------
-if command -v kitten >/dev/null && [[ -n "${KITTY_NAME:-}" ]]; then
+# If we ship a local kitty theme conf at configs/kitty/themes/<theme>.conf,
+# install it directly (overrides the upstream kitten registry, so we can
+# match alacritty exactly — e.g. neutral "ubuntu" instead of the registry's
+# aubergine #300A24). Otherwise fall back to the kitten themes registry.
+LOCAL_KITTY_THEME="$DOTFILES/configs/kitty/themes/${THEME}.conf"
+KITTY_CURRENT="$HOME/.config/kitty/current-theme.conf"
+if [[ -f "$LOCAL_KITTY_THEME" ]]; then
+    echo "    kitty:      ${THEME}.conf  (local override)"
+    install -Dm644 "$LOCAL_KITTY_THEME" "$KITTY_CURRENT"
+    # Live-reload any kitty with a remote-control socket; pre-IPC kittys
+    # need a manual restart. Non-fatal if no kittys are reachable.
+    if command -v kitten >/dev/null; then
+        kitten @ --to unix:@kitty load-config >/dev/null 2>&1 \
+            || echo "                (live reload skipped — restart pre-IPC kittys to apply)"
+    fi
+elif command -v kitten >/dev/null && [[ -n "${KITTY_NAME:-}" ]]; then
     echo "    kitty:      ${KITTY_NAME}"
     kitten themes --reload-in=all "${KITTY_NAME}" >/dev/null 2>&1 \
         || echo "                (kitty theme apply failed — non-fatal)"
